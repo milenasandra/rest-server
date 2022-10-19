@@ -1,4 +1,5 @@
 const {request, response} = require('express')
+const User = require('../models/user')
 
 const getUsers = (req = request, res = response) => {
   //  Url/api/users/?name=Sandra&date=2022-04-12 --->signo del query ? ----> se pueden mandar varios con el &
@@ -19,12 +20,15 @@ const getUsersById = (req = request, res = response) => {
   })
 }
 
-const createUser = (req = request, res = response) => {
+const createUser = async (req = request, res = response) => {
   //  Url/api/users/ ----> Es el objeto en JSON
-  const data = req.body
+  const body = req.body
+  const user = new User(body)
+  await user.save()
+
   res.status(201).json({
     msg: 'post API - Controller',
-    data,
+    user,
   })
 }
 
