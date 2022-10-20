@@ -1,4 +1,5 @@
-const {request, response} = require('express')
+const {request, response, json} = require('express')
+const bcryptjs = require('bcryptjs')
 const User = require('../models/user')
 
 const getUsers = (req = request, res = response) => {
@@ -22,8 +23,14 @@ const getUsersById = (req = request, res = response) => {
 
 const createUser = async (req = request, res = response) => {
   //  Url/api/users/ ----> Es el objeto en JSON
-  const body = req.body
-  const user = new User(body)
+
+  const {name, email, password, role} = req.body
+  const user = new User({name, email, password, role})
+
+  // Verificar si el correo ya existe en la BD
+
+  user.password = bcryptjs.hashSync(password, bcryptjs.genSaltSync())
+
   await user.save()
 
   res.status(201).json({
