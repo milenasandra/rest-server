@@ -100,8 +100,7 @@ const deleteUser = async (req = request, res = response) => {
     )
 
     res.json({
-      msg: 'delete API',
-      deleteUser,
+      deletedUser,
     })
   } catch (error) {
     console.log(error)
